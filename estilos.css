@@ -1,219 +1,268 @@
+
 body {
-  background-color: #121212;
-  color: #E0E0E0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  padding: 2rem;
+    background-color: #121212;
+    color: #E0E0E0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 2rem;
 }
+
 h1 {
-  color: #80CBC4;
-  text-align: center;
+    color: #80CBC4;
+    text-align: center;
 }
+
 form {
-  margin-bottom: 2rem;
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
 }
+
 input, button {
-  padding: 0.5rem;
-  border: none;
-  border-radius: 4px;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 4px;
 }
+
 input {
-  background-color: #1E1E1E;
-  color: #E0E0E0;
-  border: 1px solid #333;
+    background-color: #1E1E1E;
+    color: #E0E0E0;
+    border: 1px solid #333;
 }
+
 button {
-  background-color: #80CBC4;
-  color: #121212;
-  cursor: pointer;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #1E1E1E;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
-  border-radius: 8px;
-  overflow: hidden;
-}
-th, td {
-  padding: 12px 15px;
-  border-bottom: 1px solid #333;
-  text-align: left;
-}
-th {
-  background-color: #292929;
-  color: #80CBC4;
-  font-weight: 600;
-}
-tr:hover {
-  background-color: #333;
+    background-color: #80CBC4;
+    color: #121212;
+    cursor: pointer;
 }
 
 input[type="date"] {
-  background-color: #292929;  /* gris oscuro para que contraste con fondo negro */
-  color: #80CBC4;             /* color aqua clarito, para que el texto se vea */
-  border: 1px solid #80CBC4;  /* borde igual en aqua para que destaque */
-  padding-left: 35px;         /* espacio para el icono si querés poner uno */
-  position: relative;
-  font-weight: 600;
+    background-color: #292929;
+    color: #80CBC4;
+    border: 1px solid #80CBC4;
+    padding-left: 35px;
+    position: relative;
+    font-weight: 600;
 }
 
-/* Opcional: icono calendario a la izquierda dentro del input */
 input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(75%) sepia(100%) saturate(500%) hue-rotate(150deg);
-  cursor: pointer;
+    filter: invert(75%) sepia(100%) saturate(500%) hue-rotate(150deg);
+    cursor: pointer;
 }
+
+/* SOLUCIÓN CABECERA FIJA */
+.tabla-container {
+    max-height: 70vh;
+    margin-top: 20px;
+    border: 1px solid #456;
+    border-radius: 8px;
+    background-color: #1f2f32;
+    overflow: hidden;
+}
+
+/* Cabecera fija */
+.tabla-header {
+    background-color: #292929;
+    overflow: hidden;
+    border-bottom: 2px solid #80CBC4;
+}
+
+.tabla-header table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.tabla-header th {
+    background-color: #292929;
+    color: #80CBC4;
+    font-weight: 600;
+    padding: 12px 15px;
+    text-align: left;
+    border: none;
+}
+
+/* Contenido con scroll */
+.tabla-body {
+    max-height: calc(70vh - 50px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.tabla-body table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.tabla-body td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #333;
+    text-align: left;
+    background-color: #1E1E1E;
+}
+
+.tabla-body tr:hover td {
+    background-color: #333;
+}
+
+/* Anchos de columnas fijos */
+.col-orden { width: 8%; }
+.col-tipo { width: 10%; }
+.col-warehouse { width: 12%; }
+.col-warehouse-drc { width: 12%; }
+.col-warehouse-dest { width: 12%; }
+.col-fecha-sol { width: 12%; }
+.col-fecha-mod { width: 12%; }
+.col-cant-prod { width: 10%; }
+.col-acciones { width: 12%; }
+
+/* Scroll personalizado */
+.tabla-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.tabla-body::-webkit-scrollbar-track {
+    background: #2e3e3f;
+    border-radius: 4px;
+}
+
+.tabla-body::-webkit-scrollbar-thumb {
+    background-color: #80CBC4;
+    border-radius: 4px;
+    border: 2px solid #2e3e3f;
+}
+
+.tabla-body::-webkit-scrollbar-thumb:hover {
+    background-color: #4db6ac;
+}
+
+/* Botón detalle */
+.btnDetalle {
+    background-color: #80CBC4;
+    color: #121212;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.btnDetalle:hover {
+    background-color: #4db6ac;
+}
+
+/* MODAL STYLES */
 .modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
 }
 
 .modal.hidden {
-  display: none;
+    display: none;
 }
 
 .modal-contenido {
-  background-color: #1f2f32;
-  color: #ffffff;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 90vw;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1f2f32;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-/* Scroll personalizado para contenedores con overflow */
+
+.cerrar {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+    font-size: 24px;
+    font-weight: bold;
+    color: #f7f7f7;
+    transition: transform 0.2s ease;
+}
+
+.cerrar:hover {
+    transform: scale(1.2);
+    color: #e57373;
+}
+
+h2, h3 {
+    margin-top: 0;
+    color: #87d7d7;
+}
+
+.info-pedido {
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.tabla-productos-container {
+    overflow-x: auto;
+    background-color: #1f2f32;
+    color: #ffffff;
+    padding: 10px;
+    margin-top: 10px;
+    white-space: nowrap;
+}
+
+.tabla-productos {
+    width: 1700px;
+    border-collapse: collapse;
+    font-size: 13px;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #294648;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.tabla-productos th, .tabla-productos td {
+    border: 1px solid #456;
+    padding: 8px;
+    text-align: left;
+    color: #f0f0f0;
+}
+
+.tabla-productos th {
+    background-color: #3c5c5c;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
 .modal-contenido::-webkit-scrollbar,
 .tabla-productos-container::-webkit-scrollbar {
-  height: 8px;
-  width: 8px;
+    height: 8px;
+    width: 8px;
 }
 
 .modal-contenido::-webkit-scrollbar-track,
 .tabla-productos-container::-webkit-scrollbar-track {
-  background: #2e3e3f; 
-  border-radius: 4px;
+    background: #2e3e3f; 
+    border-radius: 4px;
 }
 
 .modal-contenido::-webkit-scrollbar-thumb,
 .tabla-productos-container::-webkit-scrollbar-thumb {
-  background-color: #80CBC4; 
-  border-radius: 4px;
-  border: 2px solid #2e3e3f;
+    background-color: #80CBC4; 
+    border-radius: 4px;
+    border: 2px solid #2e3e3f;
 }
 
 .modal-contenido::-webkit-scrollbar-thumb:hover,
 .tabla-productos-container::-webkit-scrollbar-thumb:hover {
-  background-color: #4db6ac;
-}
-
-.tabla-productos-container {
-  overflow-x: auto;
-  background-color: #1f2f32;
-  color: #ffffff;
-  padding: 10px;
-  margin-top: 10px;
-  white-space: nowrap; /* evita el wrap de la tabla */
-}
-
-
-.cerrar {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  cursor: pointer;
-  font-size: 24px;
-  font-weight: bold;
-  color: #f7f7f7;
-  transition: transform 0.2s ease;
-}
-
-.cerrar:hover {
-  transform: scale(1.2);
-  color: #e57373;
-}
-
-h2, h3 {
-  margin-top: 0;
-  color: #87d7d7;
-}
-
-.info-pedido {
-  margin-bottom: 20px;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.tabla-productos {
-  width: 1700px; /* o más si necesitas */
-  border-collapse: collapse;
-  font-size: 13px;
-  font-family: 'Courier New', Courier, monospace;
-  background-color: #294648;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.tabla-productos th, .tabla-productos td {
-  border: 1px solid #456;
-  padding: 8px;
-  text-align: left;
-  color: #f0f0f0;
-}
-
-.tabla-productos th {
-  background-color: #3c5c5c;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.tabla-principal-container {
-  max-height: 70vh; /* o el alto que te guste */
-  overflow: auto;
-  margin-top: 20px;
-  border: 1px solid #456;
-  border-radius: 8px;
-  background-color: #1f2f32;
-}
-
-/* Scroll personalizado igual que el del modal */
-.tabla-principal-container::-webkit-scrollbar {
-  height: 8px;
-  width: 8px;
-}
-
-.tabla-principal-container::-webkit-scrollbar-track {
-  background: #2e3e3f;
-  border-radius: 4px;
-}
-
-.tabla-principal-container::-webkit-scrollbar-thumb {
-  background-color: #80CBC4;
-  border-radius: 4px;
-  border: 2px solid #2e3e3f;
-}
-
-.tabla-principal-container::-webkit-scrollbar-thumb:hover {
-  background-color: #4db6ac;
-}
-
-#tabla thead th {
-  position: sticky;
-  top: 0;
-  background-color: #292929; /* el mismo que tienes en th para que combine */
-  z-index: 10;
-  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.5);
+    background-color: #4db6ac;
 }
