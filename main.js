@@ -1,4 +1,4 @@
-const URL = "https://f072-2803-a3e0-1354-2fe0-b97e-a107-d39-8f5c.ngrok-free.app/pedidos";
+const URL = "https://b862-2803-a3e0-1354-2fe0-b97e-a107-d39-8f5c.ngrok-free.app/pedidos";
 
 // Helper para formatear fechas
 function formatearFecha(fecha) {
