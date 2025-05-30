@@ -209,3 +209,11 @@ h2, h3 {
 .tabla-principal-container::-webkit-scrollbar-thumb:hover {
   background-color: #4db6ac;
 }
+
+#tabla thead th {
+  position: sticky;
+  top: 0;
+  background-color: #292929; /* el mismo que tienes en th para que combine */
+  z-index: 10;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.5);
+}
