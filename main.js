@@ -60,6 +60,15 @@ function mostrarDetalle(pedido) {
     <p><strong>Número:</strong> ${pedido.number}</p>
     <p><strong>Tipo:</strong> ${pedido.type}</p>
     <p><strong>Fecha:</strong> ${new Date(pedido.orderDate).toLocaleDateString()}</p>
+
+    <p><strong>N° Orden:</strong> ${pedido.number}</p>
+                <p><strong>Tipo:</strong> ${pedido.type}</p>
+                <p><strong>Almacén Origen:</strong> ${pedido.warehouse}</p>
+                <p><strong>Almacén Drc:</strong> ${pedido.warehouseDrc}</p>
+                <p><strong>Almacén Destino:</strong> ${pedido.warehouseDest}</p>
+                <p><strong>Fecha Solicitud:</strong> ${new Date(pedido.orderDate).toLocaleDateString()}</p>
+                <p><strong>Última Modificación:</strong> ${new Date(pedido.lmDate).toLocaleDateString()}</p>
+    
   `;
 
   const tbody = document.getElementById('detalleProductos');
@@ -68,17 +77,17 @@ function mostrarDetalle(pedido) {
   pedido.products?.forEach((prod, i) => {
     const row = document.createElement('tr');
     row.innerHTML = `
-      <td>${i + 1}</td>
+      <td>${prod.line || ''}</td>
       <td>${prod.sku || ''}</td>
       <td>${prod.description || ''}</td>
       <td>${prod.description2 || ''}</td>
-      <td>${prod.unit || ''}</td>
-      <td>${prod.address || ''}</td>
+      <td>${prod.um || ''}</td>
+      <td>${prod.location || ''}</td>
       <td>${prod.measureUnit || ''}</td>
       <td>${prod.status || ''}</td>
       <td>${prod.lastStatus || ''}</td>
-      <td>${prod.requestedQty || ''}</td>
-      <td>${prod.approvedQty || ''}</td>
+      <td>${prod.quantityOrdered || ''}</td>
+      <td>${prod.quantitySent || ''}</td>
       <td>${prod.sheetNumber || ''}</td>
       <td>${prod.referenceUser || ''}</td>
       <td>${prod.initiatorTransaction || ''}</td>
