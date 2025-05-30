@@ -1,3 +1,5 @@
+<script src="main.js?v=29052025-V00010"></script>
+
 const URL = "https://f072-2803-a3e0-1354-2fe0-b97e-a107-d39-8f5c.ngrok-free.app/pedidos";
 
 // Helper para formatear fechas
