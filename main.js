@@ -1,5 +1,10 @@
 const URL = "https://f072-2803-a3e0-1354-2fe0-b97e-a107-d39-8f5c.ngrok-free.app/pedidos";
 
+// Helper para formatear fechas
+function formatearFecha(fecha) {
+  return fecha ? new Date(fecha).toISOString().split("T")[0] : 'N/A';
+}
+
 function cargarPedidos(filtros = {}) {
   console.log('🔍 Intentando cargar pedidos con filtros:', filtros);
   console.log('🌐 URL de la API:', URL);
@@ -41,8 +46,8 @@ function cargarPedidos(filtros = {}) {
         <td>${p.warehouse || 'N/A'}</td>
         <td>${p.warehouseDrc || 'N/A'}</td>
         <td>${p.warehouseDest || 'N/A'}</td>
-        <td>${p.orderDate ? new Date(p.orderDate).toISOString().split("T")[0] : 'N/A'}</td>
-        <td>${p.lmDate ? new Date(p.lmDate).toISOString().split("T")[0] : 'N/A'}</td>
+        <td>${formatearFecha(p.orderDate)}</td>
+        <td>${formatearFecha(p.lmDate)}</td>
         <td>${p.products?.length || 0}</td>
         <td><button class="btnDetalle" onclick='mostrarDetalle(${JSON.stringify(p)})'>Ver Detalle</button></td>
       `;
@@ -56,15 +61,16 @@ function cargarPedidos(filtros = {}) {
 
 function mostrarDetalle(pedido) {
   document.getElementById('modalDetalle').classList.remove('hidden');
+  document.getElementById('tituloPedido').innerText = `Detalle del Pedido ${pedido.number || 'N/A'}`;
   document.getElementById('infoPedido').innerHTML = `
-    <p><strong>N° Orden:</strong> ${pedido.number}</p>
+    
     <p><strong>Tipo:</strong> ${pedido.type}</p>
     <p><strong>Almacén Origen:</strong> ${pedido.warehouse}</p>
     <p><strong>Almacén Drc:</strong> ${pedido.warehouseDrc}</p>
     <p><strong>Almacén Destino:</strong> ${pedido.warehouseDest}</p>
     <p><strong>Fecha Solicitud:</strong> ${new Date(pedido.orderDate).toLocaleDateString()}</p>
     <p><strong>Última Modificación:</strong> ${new Date(pedido.lmDate).toLocaleDateString()}</p>
-    `;
+  `;
 
   const tbody = document.getElementById('detalleProductos');
   tbody.innerHTML = "";
@@ -107,42 +113,34 @@ function sincronizarScrollHorizontal() {
   const tablaHeader = document.getElementById('tablaHeader');
   const tablaBody = document.getElementById('tablaBody');
   
-  // Cuando el body hace scroll horizontal, sincronizar el header
   tablaBody.addEventListener('scroll', function() {
     tablaHeader.scrollLeft = tablaBody.scrollLeft;
   });
   
-  // Cuando el header hace scroll horizontal, sincronizar el body
   tablaHeader.addEventListener('scroll', function() {
     tablaBody.scrollLeft = tablaHeader.scrollLeft;
   });
 }
 
-// Event listeners
 document.addEventListener('DOMContentLoaded', function() {
-  // Inicializar sincronización de scroll horizontal
   sincronizarScrollHorizontal();
   
-  // Cerrar modal con X
   document.getElementById("cerrarModal").addEventListener("click", () => {
     document.getElementById('modalDetalle').classList.add('hidden');
   });
 
-  // Cerrar modal con ESC
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
       document.getElementById('modalDetalle').classList.add('hidden');
     }
   });
 
-  // Cerrar modal clickeando fuera
   document.getElementById('modalDetalle').addEventListener('click', function(e) {
     if (e.target === this) {
       this.classList.add('hidden');
     }
   });
 
-  // Formulario de filtros
   document.getElementById("formFiltros").addEventListener("submit", e => {
     e.preventDefault();
     const filtros = {
@@ -155,7 +153,8 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     cargarPedidos(filtros);
   });
-  
-  // Cargar pedidos iniciales (opcional)
+
+  // Si quieres cargar de una vez los pedidos al abrir la página, descomenta esto:
   // cargarPedidos();
 });
+
