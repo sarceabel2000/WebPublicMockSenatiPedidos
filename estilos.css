@@ -9,14 +9,17 @@ body {
     background-color: #121212;
     color: #E0E0E0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding: 2rem;
-    overflow-x: hidden; /* evita scroll horizontal inesperado */
+    padding: 1rem;
+    overflow-x: hidden;
+    min-height: 100vh;
 }
 
 /* TITULOS */
 h1 {
     color: #80CBC4;
     text-align: center;
+    margin-bottom: 2rem;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
 }
 
 h2, h3 {
@@ -27,34 +30,47 @@ h2, h3 {
 /* FORMULARIOS */
 form {
     margin-bottom: 2rem;
-    display: flex;
+    display: grid;
     gap: 1rem;
-    flex-wrap: wrap;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn-group {
+    grid-column: 1 / -1;
+    display: flex;
     justify-content: center;
+    margin-top: 0.5rem;
 }
 
 input, button {
-    padding: 0.5rem;
+    padding: 0.75rem;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     font-size: 1rem;
+    width: 100%;
+    transition: all 0.3s ease;
 }
 
 input {
     background-color: #1E1E1E;
     color: #E0E0E0;
     border: 1px solid #333;
-    flex-grow: 1;
-    min-width: 150px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #80CBC4;
+    box-shadow: 0 0 0 2px rgba(128, 203, 196, 0.2);
 }
 
 input[type="date"] {
     background-color: #292929;
     color: #80CBC4;
     border: 1px solid #80CBC4;
-    padding-left: 35px;
     font-weight: 600;
-    position: relative;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
@@ -66,70 +82,87 @@ button {
     background-color: #80CBC4;
     color: #121212;
     cursor: pointer;
-    min-width: 100px;
     font-weight: 600;
-    transition: background-color 0.3s ease;
+    max-width: 200px;
+    margin: 0 auto;
 }
 
 button:hover {
     background-color: #4db6ac;
+    transform: translateY(-2px);
 }
 
-/* TABLA PEDIDOS CONTENEDOR */
+button:active {
+    transform: translateY(0);
+}
+
+/* CONTENEDOR PRINCIPAL DE TABLA */
 .tabla-container {
     max-height: 70vh;
     margin-top: 20px;
     border: 1px solid #456;
-    border-radius: 8px;
+    border-radius: 12px;
     background-color: #1f2f32;
-    overflow-x: auto; /* scroll horizontal para pantallas pequeñas */
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch; /* suaviza scroll en iOS */
+    overflow: hidden;
+    position: relative;
 }
 
-/* TABLA HEADER */
+/* TABLA HEADER - SCROLL HORIZONTAL SINCRONIZADO */
 .tabla-header {
     background-color: #292929;
-    overflow: hidden;
     border-bottom: 2px solid #80CBC4;
+    overflow-x: auto;
+    overflow-y: hidden;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    /* Ocultar scrollbar del header pero permitir scroll */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.tabla-header::-webkit-scrollbar {
+    display: none;
 }
 
 .tabla-header table {
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
-    min-width: 900px; /* para que no se aplasten columnas */
+    min-width: 1000px;
 }
 
 .tabla-header th {
     color: #80CBC4;
     font-weight: 600;
-    padding: 12px 15px;
+    padding: 15px 12px;
     text-align: left;
     border: none;
     white-space: nowrap;
+    font-size: 0.9rem;
 }
 
-/* TABLA BODY */
+/* TABLA BODY CON SCROLL SINCRONIZADO */
 .tabla-body {
-    max-height: calc(70vh - 50px);
+    max-height: calc(70vh - 60px);
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
 }
 
 .tabla-body table {
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
-    min-width: 900px;
+    min-width: 1000px;
 }
 
 .tabla-body td {
-    padding: 12px 15px;
+    padding: 15px 12px;
     border-bottom: 1px solid #333;
     text-align: left;
     background-color: #1E1E1E;
     white-space: nowrap;
+    font-size: 0.85rem;
 }
 
 .tabla-body tr:hover td {
@@ -137,38 +170,34 @@ button:hover {
 }
 
 /* COLUMNAS CON ANCHO FIJO */
-.col-orden { width: 8%; }
-.col-tipo { width: 10%; }
-.col-warehouse { width: 12%; }
-.col-warehouse-drc { width: 12%; }
-.col-warehouse-dest { width: 12%; }
-.col-fecha-sol { width: 12%; }
-.col-fecha-mod { width: 12%; }
-.col-cant-prod { width: 10%; }
-.col-acciones { width: 12%; }
+.col-orden { width: 100px; }
+.col-tipo { width: 120px; }
+.col-warehouse { width: 140px; }
+.col-warehouse-drc { width: 140px; }
+.col-warehouse-dest { width: 140px; }
+.col-fecha-sol { width: 130px; }
+.col-fecha-mod { width: 130px; }
+.col-cant-prod { width: 120px; }
+.col-acciones { width: 120px; }
 
-/* SCROLLBAR PERSONALIZADO */
-.tabla-body::-webkit-scrollbar,
-.tabla-container::-webkit-scrollbar {
+/* SCROLLBAR PERSONALIZADO PARA TABLA BODY */
+.tabla-body::-webkit-scrollbar {
     height: 8px;
     width: 8px;
 }
 
-.tabla-body::-webkit-scrollbar-track,
-.tabla-container::-webkit-scrollbar-track {
+.tabla-body::-webkit-scrollbar-track {
     background: #2e3e3f;
     border-radius: 4px;
 }
 
-.tabla-body::-webkit-scrollbar-thumb,
-.tabla-container::-webkit-scrollbar-thumb {
+.tabla-body::-webkit-scrollbar-thumb {
     background-color: #80CBC4;
     border-radius: 4px;
     border: 2px solid #2e3e3f;
 }
 
-.tabla-body::-webkit-scrollbar-thumb:hover,
-.tabla-container::-webkit-scrollbar-thumb:hover {
+.tabla-body::-webkit-scrollbar-thumb:hover {
     background-color: #4db6ac;
 }
 
@@ -177,15 +206,18 @@ button:hover {
     background-color: #80CBC4;
     color: #121212;
     border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
+    padding: 8px 12px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 12px;
-    transition: background-color 0.3s ease;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    white-space: nowrap;
 }
 
 .btnDetalle:hover {
     background-color: #4db6ac;
+    transform: scale(1.05);
 }
 
 /* MODAL */
@@ -195,11 +227,12 @@ button:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,0.7);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1000;
+    backdrop-filter: blur(5px);
 }
 
 .modal.hidden {
@@ -209,38 +242,53 @@ button:hover {
 .modal-contenido {
     background-color: #1f2f32;
     color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 90vw;
+    padding: 2rem;
+    border-radius: 16px;
+    max-width: 95vw;
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
-    box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* CERRAR MODAL */
 .cerrar {
     position: absolute;
-    top: 10px;
-    right: 15px;
+    top: 15px;
+    right: 20px;
     cursor: pointer;
-    font-size: 24px;
+    font-size: 28px;
     font-weight: bold;
     color: #f7f7f7;
-    transition: transform 0.2s ease;
+    transition: all 0.3s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .cerrar:hover {
     transform: scale(1.2);
     color: #e57373;
+    background-color: rgba(229, 115, 115, 0.2);
 }
 
 /* INFO PEDIDO DENTRO MODAL */
 .info-pedido {
-    margin-bottom: 20px;
-    font-size: 14px;
-    line-height: 1.6;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 0.5rem;
+}
+
+.info-pedido p {
+    margin-bottom: 0.5rem;
 }
 
 /* TABLA PRODUCTOS EN MODAL */
@@ -248,16 +296,18 @@ button:hover {
     overflow-x: auto;
     background-color: #1f2f32;
     color: #ffffff;
-    padding: 10px;
-    margin-top: 10px;
-    white-space: nowrap;
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 8px;
+    border: 1px solid #456;
 }
 
 .tabla-productos {
-    width: 1700px;
+    width: 100%;
+    min-width: 1500px;
     border-collapse: collapse;
-    font-size: 13px;
-    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.8rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #294648;
     border-radius: 8px;
     overflow: hidden;
@@ -265,7 +315,7 @@ button:hover {
 
 .tabla-productos th, .tabla-productos td {
     border: 1px solid #456;
-    padding: 8px;
+    padding: 10px 8px;
     text-align: left;
     color: #f0f0f0;
 }
@@ -274,6 +324,9 @@ button:hover {
     background-color: #3c5c5c;
     font-weight: bold;
     text-transform: uppercase;
+    position: sticky;
+    top: 0;
+    z-index: 5;
 }
 
 /* SCROLLBAR MODAL Y TABLA PRODUCTOS */
@@ -301,151 +354,212 @@ button:hover {
     background-color: #4db6ac;
 }
 
-/* MEDIA QUERIES RESPONSIVE */
-
-/* CELULARES PEQUEÑOS Y PHABLETS */
-@media (max-width: 480px) {
-    body {
-        padding: 1rem;
-    }
-
-    form {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.8rem;
-    }
-
-    input, button {
-        width: 100%;
-        max-width: 100%;
-        margin: 0 auto;
-        display: block;
-        font-size: 14px;
-        padding: 0.6rem 1rem;
-    }
-
-    button {
-        margin-top: 0.6rem;
-    }
-
-    .tabla-container {
-        max-width: 100%;
-        border-radius: 0;
-    }
-
-    .tabla-header table,
-    .tabla-body table,
-    .tabla-productos {
-        min-width: 700px;
-        table-layout: auto;
-        font-size: 12px;
-    }
-
-    .tabla-header th, 
-    .tabla-body td {
-        font-size: 12px;
-        padding: 8px 10px;
-        white-space: nowrap;
-    }
-
-    .modal-contenido {
-        max-width: 95vw;
-        max-height: 90vh;
-        padding: 15px;
-        font-size: 14px;
-    }
-
-    .tabla-productos-container {
-        padding: 5px;
-        overflow-x: auto;
-    }
-}
-
-/* TABLETS (ipad, android tablets) */
-@media (min-width: 481px) and (max-width: 1024px) {
-    body {
-        padding: 1.5rem;
-    }
-
-    form {
-        flex-wrap: wrap;
-        gap: 1rem;
-        justify-content: center;
-    }
-
-    input, button {
-        min-width: 180px;
-        font-size: 15px;
-        padding: 0.6rem 1rem;
-    }
-
-    .tabla-container {
-        max-width: 100%;
-        border-radius: 6px;
-    }
-
-    .tabla-header table,
-    .tabla-body table,
-    .tabla-productos {
-        min-width: 900px;
-        font-size: 13px;
-    }
-
-    .modal-contenido {
-        max-width: 90vw;
-        max-height: 90vh;
-        padding: 20px;
-        font-size: 15px;
-    }
-}
-
-/* DESKTOP (laptop y pc) */
-@media (min-width: 1025px) {
-    body {
-        padding: 2rem 3rem;
-    }
-
-    form {
-        flex-wrap: nowrap;
-        gap: 1rem;
-        justify-content: center;
-    }
-
-    input, button {
-        min-width: 150px;
-        font-size: 1rem;
-        padding: 0.5rem;
-    }
-
-    .tabla-container {
-        max-width: 100%;
-        border-radius: 8px;
-    }
-
-    .tabla-header table,
-    .tabla-body table,
-    .tabla-productos {
-        min-width: 900px;
-        font-size: 14px;
-    }
-
-    .modal-contenido {
-        max-width: 900px;
-        max-height: 90vh;
-        padding: 20px;
-        font-size: 16px;
-    }
-}
-
-/* FOOTER VERSIÓN */
+/* FOOTER */
 footer {
     position: fixed;
-    bottom: 5px;
-    right: 10px;
+    bottom: 10px;
+    right: 15px;
     font-size: 12px;
     color: #80CBC4;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     user-select: none;
     opacity: 0.7;
     z-index: 1100;
+}
+
+/* MEDIA QUERIES RESPONSIVE */
+
+/* MÓVILES PEQUEÑOS */
+@media (max-width: 480px) {
+    body {
+        padding: 1rem 0.5rem;
+    }
+
+    h1 {
+        margin-bottom: 2.5rem;
+        font-size: 1.8rem;
+    }
+
+    form {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 0 0.5rem;
+    }
+
+    input, button {
+        padding: 1rem;
+        font-size: 16px; /* Evita zoom en iOS */
+    }
+
+    .tabla-container {
+        margin: 1rem -0.5rem 0;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+
+    .tabla-header th, 
+    .tabla-body td {
+        font-size: 0.75rem;
+        padding: 12px 8px;
+    }
+
+    .col-orden { width: 80px; }
+    .col-tipo { width: 100px; }
+    .col-warehouse { width: 120px; }
+    .col-warehouse-drc { width: 120px; }
+    .col-warehouse-dest { width: 120px; }
+    .col-fecha-sol { width: 110px; }
+    .col-fecha-mod { width: 110px; }
+    .col-cant-prod { width: 100px; }
+    .col-acciones { width: 100px; }
+
+    .btnDetalle {
+        padding: 6px 8px;
+        font-size: 11px;
+    }
+
+    .modal-contenido {
+        padding: 1.5rem 1rem;
+        margin: 1rem;
+        max-width: calc(100vw - 2rem);
+    }
+
+    .info-pedido {
+        grid-template-columns: 1fr;
+        font-size: 0.9rem;
+    }
+
+    .cerrar {
+        top: 10px;
+        right: 15px;
+        font-size: 24px;
+        width: 35px;
+        height: 35px;
+    }
+}
+
+/* MÓVILES GRANDES Y TABLETS PEQUEÑOS */
+@media (min-width: 481px) and (max-width: 768px) {
+    body {
+        padding: 1.5rem 1rem;
+    }
+
+    h1 {
+        margin-bottom: 2.5rem;
+    }
+
+    form {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        max-width: 600px;
+    }
+
+    input, button {
+        padding: 0.875rem;
+        font-size: 16px;
+    }
+
+    .tabla-container {
+        margin-top: 1.5rem;
+    }
+
+    .modal-contenido {
+        max-width: 90vw;
+        padding: 2rem 1.5rem;
+    }
+
+    .info-pedido {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* TABLETS GRANDES */
+@media (min-width: 769px) and (max-width: 1024px) {
+    body {
+        padding: 2rem 1.5rem;
+    }
+
+    h1 {
+        margin-bottom: 2.5rem;
+    }
+
+    form {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        max-width: 900px;
+    }
+
+    .modal-contenido {
+        max-width: 85vw;
+        padding: 2rem;
+    }
+
+    .info-pedido {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* DESKTOP */
+@media (min-width: 1025px) {
+    body {
+        padding: 2rem 3rem;
+    }
+
+    h1 {
+        margin-bottom: 2rem;
+    }
+
+    form {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        max-width: 1200px;
+    }
+
+    .modal-contenido {
+        max-width: 1200px;
+        padding: 2.5rem;
+    }
+
+    .info-pedido {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ESPECÍFICO PARA iOS */
+@supports (-webkit-touch-callout: none) {
+    h1 {
+        margin-bottom: 3rem;
+    }
+    
+    input {
+        font-size: 16px; /* Evita zoom automático */
+    }
+    
+    .tabla-container {
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .tabla-body {
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .tabla-header {
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .modal-contenido {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* MODO LANDSCAPE EN MÓVILES */
+@media (max-width: 768px) and (orientation: landscape) {
+    .tabla-container {
+        max-height: 50vh;
+    }
+    
+    .modal-contenido {
+        max-height: 80vh;
+    }
 }

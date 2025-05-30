@@ -57,19 +57,14 @@ function cargarPedidos(filtros = {}) {
 function mostrarDetalle(pedido) {
   document.getElementById('modalDetalle').classList.remove('hidden');
   document.getElementById('infoPedido').innerHTML = `
-    <p><strong>Número:</strong> ${pedido.number}</p>
-    <p><strong>Tipo:</strong> ${pedido.type}</p>
-    <p><strong>Fecha:</strong> ${new Date(pedido.orderDate).toLocaleDateString()}</p>
-
     <p><strong>N° Orden:</strong> ${pedido.number}</p>
-                <p><strong>Tipo:</strong> ${pedido.type}</p>
-                <p><strong>Almacén Origen:</strong> ${pedido.warehouse}</p>
-                <p><strong>Almacén Drc:</strong> ${pedido.warehouseDrc}</p>
-                <p><strong>Almacén Destino:</strong> ${pedido.warehouseDest}</p>
-                <p><strong>Fecha Solicitud:</strong> ${new Date(pedido.orderDate).toLocaleDateString()}</p>
-                <p><strong>Última Modificación:</strong> ${new Date(pedido.lmDate).toLocaleDateString()}</p>
-    
-  `;
+    <p><strong>Tipo:</strong> ${pedido.type}</p>
+    <p><strong>Almacén Origen:</strong> ${pedido.warehouse}</p>
+    <p><strong>Almacén Drc:</strong> ${pedido.warehouseDrc}</p>
+    <p><strong>Almacén Destino:</strong> ${pedido.warehouseDest}</p>
+    <p><strong>Fecha Solicitud:</strong> ${new Date(pedido.orderDate).toLocaleDateString()}</p>
+    <p><strong>Última Modificación:</strong> ${new Date(pedido.lmDate).toLocaleDateString()}</p>
+    `;
 
   const tbody = document.getElementById('detalleProductos');
   tbody.innerHTML = "";
@@ -101,19 +96,66 @@ function probarConexion() {
   cargarPedidos();
 }
 
-document.getElementById("cerrarModal").addEventListener("click", () => {
-  document.getElementById('modalDetalle').classList.add('hidden');
-});
+function mostrarMensajeError(mensaje) {
+  console.error('Error:', mensaje);
+  const tbody = document.querySelector('#tabla tbody');
+  tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: #e57373;">${mensaje}</td></tr>`;
+}
 
-document.getElementById("formFiltros").addEventListener("submit", e => {
-  e.preventDefault();
-  const filtros = {
-    number: document.getElementById("filtroNumber").value,
-    type: document.getElementById("filtroType").value,
-    warehouse: document.getElementById("filtroWarehouse").value,
-    orderDate: document.getElementById("filtroOrderDate").value,
-    minProductos: parseInt(document.getElementById("filtroMinProductos").value) || 0,
-    maxProductos: parseInt(document.getElementById("filtroMaxProductos").value) || 0,
-  };
-  cargarPedidos(filtros);
+// Función para sincronizar el scroll horizontal entre header y body
+function sincronizarScrollHorizontal() {
+  const tablaHeader = document.getElementById('tablaHeader');
+  const tablaBody = document.getElementById('tablaBody');
+  
+  // Cuando el body hace scroll horizontal, sincronizar el header
+  tablaBody.addEventListener('scroll', function() {
+    tablaHeader.scrollLeft = tablaBody.scrollLeft;
+  });
+  
+  // Cuando el header hace scroll horizontal, sincronizar el body
+  tablaHeader.addEventListener('scroll', function() {
+    tablaBody.scrollLeft = tablaHeader.scrollLeft;
+  });
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', function() {
+  // Inicializar sincronización de scroll horizontal
+  sincronizarScrollHorizontal();
+  
+  // Cerrar modal con X
+  document.getElementById("cerrarModal").addEventListener("click", () => {
+    document.getElementById('modalDetalle').classList.add('hidden');
+  });
+
+  // Cerrar modal con ESC
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.getElementById('modalDetalle').classList.add('hidden');
+    }
+  });
+
+  // Cerrar modal clickeando fuera
+  document.getElementById('modalDetalle').addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.classList.add('hidden');
+    }
+  });
+
+  // Formulario de filtros
+  document.getElementById("formFiltros").addEventListener("submit", e => {
+    e.preventDefault();
+    const filtros = {
+      number: document.getElementById("filtroNumber").value,
+      type: document.getElementById("filtroType").value,
+      warehouse: document.getElementById("filtroWarehouse").value,
+      orderDate: document.getElementById("filtroOrderDate").value,
+      minProductos: parseInt(document.getElementById("filtroMinProductos").value) || 0,
+      maxProductos: parseInt(document.getElementById("filtroMaxProductos").value) || 0,
+    };
+    cargarPedidos(filtros);
+  });
+  
+  // Cargar pedidos iniciales (opcional)
+  // cargarPedidos();
 });
