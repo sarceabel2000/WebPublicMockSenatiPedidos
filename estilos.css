@@ -327,3 +327,43 @@ h2, h3 {
         right: 10px;
     }
 }
+
+
+/* Contenedor general con scroll horizontal para toda la tabla */
+.tabla-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* suaviza el scroll en iOS */
+}
+
+/* Evita que las tablas intenten reducirse más de lo necesario */
+.tabla-header table,
+.tabla-body table {
+    min-width: 900px; /* ajusta según columnas, que sea más ancho que el viewport */
+    border-collapse: collapse;
+}
+
+/* Evitar que las celdas se partan en dos líneas */
+.tabla-header th,
+.tabla-body td {
+    white-space: nowrap;
+}
+
+/* Opcional: el scrollbar siempre visible para que el usuario vea que puede deslizar */
+.tabla-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.tabla-container::-webkit-scrollbar-track {
+    background: #2e3e3f;
+    border-radius: 4px;
+}
+
+.tabla-container::-webkit-scrollbar-thumb {
+    background-color: #80CBC4;
+    border-radius: 4px;
+    border: 2px solid #2e3e3f;
+}
+
+.tabla-container::-webkit-scrollbar-thumb:hover {
+    background-color: #4db6ac;
+}
