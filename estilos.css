@@ -1,4 +1,3 @@
-
 body {
     background-color: #121212;
     color: #E0E0E0;
@@ -51,7 +50,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
 }
 
-/* SOLUCIÓN CABECERA FIJA */
+/* Tabla de pedidos */
 .tabla-container {
     max-height: 70vh;
     margin-top: 20px;
@@ -61,7 +60,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     overflow: hidden;
 }
 
-/* Cabecera fija */
 .tabla-header {
     background-color: #292929;
     overflow: hidden;
@@ -83,7 +81,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     border: none;
 }
 
-/* Contenido con scroll */
 .tabla-body {
     max-height: calc(70vh - 50px);
     overflow-y: auto;
@@ -107,7 +104,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     background-color: #333;
 }
 
-/* Anchos de columnas fijos */
 .col-orden { width: 8%; }
 .col-tipo { width: 10%; }
 .col-warehouse { width: 12%; }
@@ -118,27 +114,24 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .col-cant-prod { width: 10%; }
 .col-acciones { width: 12%; }
 
-/* Scroll personalizado */
+/* Scroll personalizado tabla */
 .tabla-body::-webkit-scrollbar {
     width: 8px;
 }
-
 .tabla-body::-webkit-scrollbar-track {
     background: #2e3e3f;
     border-radius: 4px;
 }
-
 .tabla-body::-webkit-scrollbar-thumb {
     background-color: #80CBC4;
     border-radius: 4px;
     border: 2px solid #2e3e3f;
 }
-
 .tabla-body::-webkit-scrollbar-thumb:hover {
     background-color: #4db6ac;
 }
 
-/* Botón detalle */
+/* Botón Detalle */
 .btnDetalle {
     background-color: #80CBC4;
     color: #121212;
@@ -148,12 +141,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
     font-size: 12px;
 }
-
 .btnDetalle:hover {
     background-color: #4db6ac;
 }
 
-/* MODAL STYLES */
+/* Modal */
 .modal {
     position: fixed;
     top: 0;
@@ -166,11 +158,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     justify-content: center;
     z-index: 1000;
 }
-
 .modal.hidden {
     display: none;
 }
-
 .modal-contenido {
     background-color: #1f2f32;
     color: #ffffff;
@@ -183,7 +173,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
 .cerrar {
     position: absolute;
     top: 10px;
@@ -194,7 +183,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     color: #f7f7f7;
     transition: transform 0.2s ease;
 }
-
 .cerrar:hover {
     transform: scale(1.2);
     color: #e57373;
@@ -211,6 +199,7 @@ h2, h3 {
     line-height: 1.6;
 }
 
+/* Tabla de productos */
 .tabla-productos-container {
     overflow-x: auto;
     background-color: #1f2f32;
@@ -243,6 +232,7 @@ h2, h3 {
     text-transform: uppercase;
 }
 
+/* Scroll modal y productos */
 .modal-contenido::-webkit-scrollbar,
 .tabla-productos-container::-webkit-scrollbar {
     height: 8px;
@@ -265,4 +255,71 @@ h2, h3 {
 .modal-contenido::-webkit-scrollbar-thumb:hover,
 .tabla-productos-container::-webkit-scrollbar-thumb:hover {
     background-color: #4db6ac;
+}
+
+
+/* MOBILE */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+    }
+
+    form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .tabla-container {
+        max-width: 100%;
+        border-radius: 0;
+    }
+
+    .tabla-header th, .tabla-body td {
+        font-size: 12px;
+        padding: 8px 10px;
+    }
+
+    .col-orden,
+    .col-tipo,
+    .col-warehouse,
+    .col-warehouse-drc,
+    .col-warehouse-dest,
+    .col-fecha-sol,
+    .col-fecha-mod,
+    .col-cant-prod,
+    .col-acciones {
+        width: auto;
+    }
+
+    .tabla-productos {
+        width: 100%;
+        font-size: 12px;
+    }
+
+    .modal-contenido {
+        max-width: 95vw;
+        max-height: 90vh;
+        padding: 15px;
+        font-size: 14px;
+    }
+
+    .tabla-productos-container {
+        padding: 5px;
+    }
+
+    input, button {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .btnDetalle {
+        font-size: 12px;
+        width: 100%;
+    }
+
+    .cerrar {
+        font-size: 20px;
+        top: 5px;
+        right: 10px;
+    }
 }

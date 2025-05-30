@@ -2,7 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <title>Pedidos Mock</title>
   <link rel="stylesheet" href="estilos.css">
 </head>
@@ -16,8 +18,10 @@
     <input type="date" id="filtroOrderDate" placeholder="Fecha Solicitud" />
     <input type="number" id="filtroMinProductos" placeholder="Mínimo productos" min="0" />
     <input type="number" id="filtroMaxProductos" placeholder="Máximo productos" min="0" />
-    <button type="submit">Filtrar</button>
-    <button type="button" onclick="probarConexion()" style="background-color: #4CAF50;">🔍 Probar API</button>
+    <div class="btn-group">
+      <button type="submit">Filtrar</button>
+      <button type="button" onclick="probarConexion()" class="btn-verde">🔍 Probar API</button>
+    </div>
   </form>
 
   <div class="tabla-container">
@@ -36,7 +40,7 @@
         </tr>
       </table>
     </div>
-    
+
     <div class="tabla-body">
       <table id="tabla">
         <tbody></tbody>
