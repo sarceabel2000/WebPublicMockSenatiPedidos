@@ -1,76 +1,92 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
-  <title>Pedidos Mock</title>
-  <link rel="stylesheet" href="estilos.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Pedidos Mock</title>
+    <link rel="stylesheet" href="estilos.css">
 </head>
+
 <body>
-  <h1>Pedidos Mock</h1>
+    <h1>Pedidos Mock</h1>
 
-  <form id="formFiltros">
-    <input type="text" id="filtroNumber" placeholder="Número de pedido" />
-    <input type="text" id="filtroType" placeholder="Tipo" />
-    <input type="text" id="filtroWarehouse" placeholder="Almacén" />
-    <input type="date" id="filtroOrderDate" placeholder="Fecha Solicitud" />
-    <input type="number" id="filtroMinProductos" placeholder="Mínimo productos" min="0" />
-    <input type="number" id="filtroMaxProductos" placeholder="Máximo productos" min="0" />
-    <div class="btn-group">
-      <button type="submit">Filtrar</button>
-      <button type="button" onclick="probarConexion()" class="btn-verde">🔍 Probar API</button>
+    <form id="formFiltros">
+        <input type="text" id="filtroNumber" placeholder="Número de pedido" />
+        <input type="text" id="filtroType" placeholder="Tipo" />
+        <input type="text" id="filtroWarehouse" placeholder="Almacén" />
+        <input type="date" id="filtroOrderDate" placeholder="Fecha Solicitud" />
+        <input type="number" id="filtroMinProductos" placeholder="Mínimo productos" min="0" />
+        <input type="number" id="filtroMaxProductos" placeholder="Máximo productos" min="0" />
+        <div class="btn-group">
+            <button type="submit">Filtrar</button>
+            <button type="button" onclick="probarConexion()" class="btn-verde">🔍 Probar API</button>
+        </div>
+    </form>
+
+    <div class="tabla-container">
+        <div class="tabla-header">
+            <table>
+                <tr>
+                    <th class="col-orden">N° Orden</th>
+                    <th class="col-tipo">Tipo</th>
+                    <th class="col-warehouse">Warehouse</th>
+                    <th class="col-warehouse-drc">Warehouse Drc</th>
+                    <th class="col-warehouse-dest">Warehouse Dest</th>
+                    <th class="col-fecha-sol">Fecha Solicitud</th>
+                    <th class="col-fecha-mod">Fecha Modificación</th>
+                    <th class="col-cant-prod">Cant. Productos</th>
+                    <th class="col-acciones">Acciones</th>
+                </tr>
+            </table>
+        </div>
+
+        <div class="tabla-body">
+            <table id="tabla">
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
-  </form>
 
-  <div class="tabla-container">
-    <div class="tabla-header">
-      <table>
-        <tr>
-          <th class="col-orden">N° Orden</th>
-          <th class="col-tipo">Tipo</th>
-          <th class="col-warehouse">Warehouse</th>
-          <th class="col-warehouse-drc">Warehouse Drc</th>
-          <th class="col-warehouse-dest">Warehouse Dest</th>
-          <th class="col-fecha-sol">Fecha Solicitud</th>
-          <th class="col-fecha-mod">Fecha Modificación</th>
-          <th class="col-cant-prod">Cant. Productos</th>
-          <th class="col-acciones">Acciones</th>
-        </tr>
-      </table>
+    <div id="modalDetalle" class="modal hidden">
+        <div class="modal-contenido">
+            <span id="cerrarModal" class="cerrar">&times;</span>
+            <h2>Detalle del Pedido</h2>
+            <div id="infoPedido" class="info-pedido"></div>
+            <h3>Productos</h3>
+            <div class="tabla-productos-container">
+                <table class="tabla-productos">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>SKU</th>
+                            <th>Descripción</th>
+                            <th>Descripción 2</th>
+                            <th>Und. Medida</th>
+                            <th>Dirección</th>
+                            <th>measureUnit</th>
+                            <th>Estado</th>
+                            <th>Last Status</th>
+                            <th>Cant. Solicitada</th>
+                            <th>Cant. Aprobada</th>
+                            <th>N° Hoja</th>
+                            <th>referenceUser</th>
+                            <th>initiatorTransaction</th>
+                            <th>userId</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detalleProductos"></tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-    <div class="tabla-body">
-      <table id="tabla">
-        <tbody></tbody>
-      </table>
-    </div>
-  </div>
-
-  <div id="modalDetalle" class="modal hidden">
-    <div class="modal-contenido">
-      <span id="cerrarModal" class="cerrar">&times;</span>
-      <h2>Detalle del Pedido</h2>
-      <div id="infoPedido" class="info-pedido"></div>
-      <h3>Productos</h3>
-      <div class="tabla-productos-container">
-        <table class="tabla-productos">
-          <thead>
-            <tr>
-              <th>Item</th><th>SKU</th><th>Descripción</th><th>Descripción 2</th>
-              <th>Und. Medida</th><th>Dirección</th><th>measureUnit</th>
-              <th>Estado</th><th>Last Status</th><th>Cant. Solicitada</th>
-              <th>Cant. Aprobada</th><th>N° Hoja</th><th>referenceUser</th>
-              <th>initiatorTransaction</th><th>userId</th>
-            </tr>
-          </thead>
-          <tbody id="detalleProductos"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <script src="main.js"></script>
+    <script src="main.js"></script>
+    <footer>
+        Versión 1.0.1
+    </footer>
 </body>
+
 </html>
