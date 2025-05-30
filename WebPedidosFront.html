@@ -1,0 +1,201 @@
+<!-- WebPedidosFront.html -->
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pedidos Mock</title>
+    <link rel="stylesheet" href="estilos.css" />
+</head>
+
+<body>
+    <h1>Pedidos Mock</h1>
+
+    <form id="formFiltros">
+        <input type="text" id="filtroNumber" placeholder="Número de pedido" />
+        <input type="text" id="filtroType" placeholder="Tipo" />
+        <input type="text" id="filtroWarehouse" placeholder="Almacén" />
+        <input type="date" id="filtroOrderDate" placeholder="Fecha Solicitud" />
+        <input type="number" id="filtroMinProductos" placeholder="Mínimo productos" min="0" />
+        <input type="number" id="filtroMaxProductos" placeholder="Máximo productos" min="0" />
+        <button type="submit">Filtrar</button>
+    </form>
+
+    <div class="tabla-principal-container">
+        <table id="tabla">
+            <thead>
+                <tr>
+                    <th>N° Orden</th>
+                    <th>Tipo</th>
+                    <th>Warehouse</th>
+                    <th>Warehouse Drc</th>
+                    <th>Warehouse Dest</th>
+                    <th>Fecha Solicitud</th>
+                    <th>Fecha Modificación</th>
+                    <th>Cant. Productos</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div id="modalDetalle" class="modal hidden">
+        <div class="modal-contenido">
+            <span id="cerrarModal" class="cerrar">&times;</span>
+            <h2>Detalle del Pedido</h2>
+            <div id="infoPedido" class="info-pedido"></div>
+            <h3>Productos</h3>
+
+            <div class="tabla-productos-container">
+                <table class="tabla-productos">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>SKU</th>
+                            <th>Descripción</th>
+                            <th>Descripción 2</th>
+                            <th>Und. Medida</th>
+                            <th>Dirección</th>
+                            <th>measureUnit</th>
+                            <th>Estado</th>
+                            <th>Last Status</th>
+                            <th>Cant. Solicitada</th>
+                            <th>Cant. Aprobada</th>
+                            <th>N° Hoja</th>
+                            <th>referenceUser</th>
+                            <th>initiatorTransaction</th>
+                            <th>userId</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detalleProductos"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const URL = "https://f072-2803-a3e0-1354-2fe0-b97e-a107-d39-8f5c.ngrok-free.app/pedidos";
+
+        function cargarPedidos(filtros = {}) {
+            fetch(URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-api-key": "abcd1234",
+                    "Authorization": "Bearer aD96N5kO1eNRM49pO2UwLTjA6Tz25mISjZ2VLYQjq7M0H1CsVP9tS7w7ki0GgTcg"
+                },
+                body: JSON.stringify(filtros)
+            })
+                .then(res => res.json())
+                .then(pedidos => {
+                    const tbody = document.querySelector('#tabla tbody');
+                    tbody.innerHTML = "";
+
+                    pedidos.forEach(pedido => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+              <td>${pedido.number}</td>
+              <td>${pedido.type}</td>
+              <td>${pedido.warehouse}</td>
+              <td>${pedido.warehouseDrc}</td>
+              <td>${pedido.warehouseDest}</td>
+              <td>${new Date(pedido.orderDate).toISOString().split("T")[0]}</td>
+              <td>${new Date(pedido.lmDate).toISOString().split("T")[0]}</td>
+              <td>${pedido.products?.length || 0}</td>
+              <td><button class="btnDetalle">Ver Detalle</button></td>
+            `;
+                        row.querySelector(".btnDetalle").addEventListener("click", () => mostrarDetalle(pedido));
+                        tbody.appendChild(row);
+                    });
+                })
+                .catch(err => console.error('Error al cargar los pedidos:', err));
+        }
+
+        document.getElementById("formFiltros").addEventListener("submit", e => {
+            e.preventDefault();
+
+            const filtros = {};
+            const rawNumber = document.getElementById("filtroNumber").value.trim();
+            const rawType = document.getElementById("filtroType").value.trim();
+            const rawWarehouse = document.getElementById("filtroWarehouse").value.trim();
+            const rawOrderDate = document.getElementById("filtroOrderDate").value.trim();
+
+            if (rawNumber !== "") {
+                const numParsed = parseInt(rawNumber);
+                if (!isNaN(numParsed)) filtros.number = numParsed;
+            }
+            if (rawType !== "") filtros.type = rawType;
+            if (rawWarehouse !== "") filtros.warehouse = rawWarehouse;
+            if (rawOrderDate !== "") {
+                const parts = rawOrderDate.split("-");
+                const utcDate = new Date(Date.UTC(+parts[0], +parts[1] - 1, +parts[2]));
+                filtros.orderDate = utcDate.toISOString();
+            }
+
+            const minParsed = parseInt(document.getElementById("filtroMinProductos").value);
+            const maxParsed = parseInt(document.getElementById("filtroMaxProductos").value);
+
+            if (!isNaN(minParsed)) filtros.minProducts = minParsed;
+            if (!isNaN(maxParsed)) filtros.maxProducts = maxParsed;
+
+            cargarPedidos(filtros);
+        });
+
+        function mostrarDetalle(pedido) {
+            const modal = document.getElementById("modalDetalle");
+            const infoPedido = document.getElementById("infoPedido");
+            const detalleProductos = document.getElementById("detalleProductos");
+
+            infoPedido.innerHTML = `
+        <strong>N° Orden:</strong> ${pedido.number} <br>
+        <strong>Tipo:</strong> ${pedido.type} <br>
+        <strong>Almacén Origen:</strong> ${pedido.warehouse} <br>
+        <strong>Almacén Drc:</strong> ${pedido.warehouseDrc} <br>
+        <strong>Almacén Destino:</strong> ${pedido.warehouseDest} <br>
+        <strong>Fecha Solicitud:</strong> ${new Date(pedido.orderDate).toLocaleDateString()} <br>
+        <strong>Última Modificación:</strong> ${new Date(pedido.lmDate).toLocaleDateString()}
+      `;
+
+            detalleProductos.innerHTML = "";
+            pedido.products.forEach(producto => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+          <td>${producto.line}</td>
+          <td>${producto.sku}</td>
+          <td>${producto.description}</td>
+          <td>${producto.description2}</td>
+          <td>${producto.um}</td>
+          <td>${producto.location}</td>
+          <td>${producto.measureUnit}</td>
+          <td>${producto.status}</td>
+          <td>${producto.lastStatus}</td>
+          <td>${producto.quantityOrdered}</td>
+          <td>${producto.quantitySent}</td>
+          <td>${producto.sheetNumber}</td>
+          <td>${producto.referenceUser}</td>
+          <td>${producto.initiatorTransaction}</td>
+          <td>${producto.userId}</td>
+        `;
+                detalleProductos.appendChild(row);
+            });
+
+            modal.classList.remove("hidden");
+        }
+
+        document.getElementById("cerrarModal").addEventListener("click", () => {
+            document.getElementById("modalDetalle").classList.add("hidden");
+        });
+
+        document.getElementById("modalDetalle").addEventListener("click", function (event) {
+            if (event.target.id === "modalDetalle") {
+                document.getElementById("modalDetalle").classList.add("hidden");
+            }
+        });
+
+        // Carga inicial sin filtros
+        cargarPedidos();
+    </script>
+</body>
+
+</html>
